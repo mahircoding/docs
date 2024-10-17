@@ -59,7 +59,7 @@ const config = {
       navbar: {
         title: 'BrizPress',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'BrizPress Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -69,10 +69,10 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          // {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
+            href: 'https://member.brizpress.com',
+            label: 'Member Area',
             position: 'right',
           },
         ],
