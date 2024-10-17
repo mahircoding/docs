@@ -2,9 +2,9 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Hai, Tutorial
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Selamat mempelajari tutorial produk BrizPress **Tutorial 5 menit**.
 
 ## Getting Started
 
