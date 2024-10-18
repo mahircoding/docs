@@ -2,12 +2,17 @@
 sidebar_position: 1
 ---
 
-# Deploy your site
+# API
 
 API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan kode lisensi dari jarak jauh, memeriksa apakah kode tersebut valid (dan tidak kedaluwarsa/expired), dan juga mengambil informasi tentang versi plugin/theme/app. API ini dapat diimplementasikan dengan sebagian besar perangkat lunak/app, bukan hanya Plugin dan Theme WordPress.
 
 
-## Build your site
+## Permintaan API yang tersedia:
+
+- `activation_license` → Digunakan untuk mengaktifkan kode lisensi dari jarak jauh
+- `deactivate_license` → Digunakan untuk menonaktifkan kode lisensi dari jarak jauh
+- `check_license` → Digunakan untuk memeriksa dari jarak jauh apakah kode lisensi diaktifkan, valid, dan tidak kedaluwarsa
+- `get_version` → Digunakan untuk mengambil informasi versi terbaru suatu produk dari jarak jauh
 
 Build your site **for production**:
 
