@@ -4,112 +4,71 @@ sidebar_position: 3
 
 # Implementasi Updater untuk Theme WordPress
 
-Dengan addon Sejoli Lisensi, Anda dapat mengatur peningkatan otomatis (auto update) untuk theme. Ini tidak berarti bahwa theme pelanggan Anda akan diperbarui dengan sendirinya, melainkan pelanggan Anda dapat memperbarui theme mereka menggunakan alat pembaruan WordPress tradisional, seolah-olah theme tersebut di hosting di WordPress.org.
+Dengan addon Sejoli Lisensi, Anda dapat mengatur pembaruan otomatis (auto update) untuk theme. Ini tidak berarti bahwa theme pelanggan Anda akan diperbarui dengan sendirinya, melainkan pelanggan Anda dapat memperbarui theme mereka menggunakan alat pembaruan WordPress tradisional, seolah-olah theme tersebut di hosting di WordPress.org.
 
-**Ada dua komponen pada updater**:
-- File `Sejoli_Plugin_Updater.php`. Ini berisi class yang membuat updater berjalan.
-- Kode yang Anda tempatkan di plugin Anda yang memuat updater yang disediakan oleh file class `Sejoli_PLugin_Updater.php`. Kode ini ada di file `sejoli-sample-plugin.php`.
+## Pengaturan
 
-## Langkah 1 – Tentukan updater constants
+Dalam addon Sejoli Lisensi Anda terdapat direktori bernama /samples/sejoli-sample-theme/updater/. Folder ini perlu disalin ke folder utama theme Anda.
 
-Pada file plugin utama Anda, sebaiknya di dekat bagian atas, atau di mana Anda telah menentukan constants lain, tambahkan kode berikut:
+Kemudian tempatkan kode berikut ke dalam `function.php` theme Anda:
 
 ```bash
-**ini adalah URL yang di-ping oleh update/pemeriksa lisensi web**. Ini harus menjadi URL situs dengan addon Sejoli License terpasang mendefinisikan ( 'SEJOLI_SAMPLE_STORE_URL', 'https://situsanda.com' );
+/**
+ * Load theme updater functions.
+ * Action is used so that child themes can easily disable.
+ */
 
-**PENTING**: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
-
-** SLUG unduhan**. Ini adalah nama direktori/folder plugin Anda dan harus cocok dengan SLUG unduhan yang terlihat di daftar Unduhan Anda (lihat contoh di bawah) mendefinisikan ('SEJOLI_SAMPLE_ITEM_SLUG', 'element-widgets' );
-
-**PENTING:** ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
-```
-
-`SEJOLI_SAMPLE_STORE_URL` harus disetel ke URL web Anda yang telah menginstal Sejoli + Addon Sejoli License.
-
-`SEJOLI_SAMPLE_ITEM_NAME` harus ditetapkan nama direktori/folder plugin Anda. Setiap produk memiliki nama direktori/folder plugin yang berbeda.
-
-
-## Langkah 2 – Sertakan class update
-
-**Direkomendasikan:** Karena semakin banyak pengembang plugin yang menggunakan ekstensi Lisensi Perangkat Lunak untuk memberikan pembaruan pada produk mereka, ada risiko “konflik” jika plugin lain menyertakan versi class **Sejoli_Plugin_Updater** yang berbeda dari yang Anda kemas dengan plugin Anda. 
-Anda dapat mengganti nama class ini menjadi sesuatu yang unik untuk plugin Anda sehingga menghindari konflik. Misalnya, jika nama plugin saya adalah “Widgets Elementor Canggih”, saya dapat mengganti nama `Sejoli_Plugin_Updater` menjadi `WEC_Plugin_Updater` dan mengubah referensi apa pun ke dalamnya.
-
-Sistem pembaruan itu sendiri terdapat di dalam file bernama `Sejoli_Plugin_Updater.php`. File ini dapat ditemukan di folder sample plugin di dalam `sejoli-sample-plugin/`. Anda perlu menyalin file ini ke folder plugin Anda sendiri. Itu bisa berada di folder utama yang sama dengan file plugin Anda, atau di subdirektori seperti `/includes/`. Apa pun yang terjadi, Anda perlu merujuknya dengan benar ke dalam kode, seperti:
-
-```bash
-if ( ! class_exists( 'Sejoli_Plugin_Updater' ) ) {
-	// memuat update jika belum ada
-	include dirname( __FILE__ ) . '/Sejoli_Plugin_Updater.php';
+function prefix_theme_updater() {
+    require( get_template_directory() . '/updater/theme-updater.php' );
 }
+add_action( 'after_setup_theme', 'prefix_theme_updater' );
 ```
 
-Anda mungkin perlu menyesuaikan jalur file, tergantung di mana Anda memutuskan untuk menempatkan file dalam struktur folder plugin Anda.
+Silakan ubah awalan (prefix) menjadi sesuatu yang sesuai dengan theme Anda. Kode ini termasuk kode updater.
 
-## Langkah 3 – Buat instance kelas pembaru
+## Konfigurasikan Pembaruan
 
-Membuat instance class update seperti ini:
+Edit `/updater/theme-updater.php` dan masukkan nilai yang sesuai untuk elemen array berikut:
 
 ```bash
-**ambil kode lisensi kami dari DB**
-$license_key = trim( get_option( ‘sejoli_sample_license_key’ ) );
-**siapkan update**
-$sejoli_updater = new Sejoli_Plugin_Updater( SEJOLI_SAMPLE_STORE_URL, __FILE__, array(
-‘version’ => ‘1.0’, → nomor versi saat ini
-‘license’ => $license_key, → kode lisensi (menggunakan get_option di atas untuk mengambil dari DB)
-‘item_id’ => SEJOLI_SAMPLE_ITEM_NAME, → id plugin ini
-‘penulis’ => ‘Nama Penulis’, → penulis plugin ini
-) );
+$config = array(
+    'remote_api_url' => 'https://YOURWEB.com', // Web tempat Sejoli diinstal
+    'item_name' => 'Nama Tema', // Nama theme
+    'theme_slug' => 'theme-slug', // Theme slug
+    'version' => '1.0.0', // Versi terkini dari theme ini
+    'author' => 'Sejoli', // Pemilik theme ini
+    'download_id' => '', // Opsional, digunakan untuk membuat link perpanjangan lisensi
+    'renew_url' => '', // Opsional, memungkinkan tautan perpanjangan lisensi khusus,
+    'item_id' => '', // ID produk pada web 
+),
 ```
 
-Kode lisensi dalam contoh ini disimpan dalam opsi/wp_options yang disebut `sejoli_sample_license_key`. Anda perlu menyesuaikan ini untuk mengambil kode lisensi dari opsi yang telah Anda siapkan untuk plugin Anda. Jika Anda memerlukan bantuan dalam menyiapkan opsi untuk menyimpan kode lisensi, lihat contoh plugin, karena plugin tersebut menyertakan halaman pengaturan yang berfungsi penuh.
-
-**Beberapa parameter yang diteruskan ke class Sejoli_Plugin_Updater**:
-- `$api_url` → ini adalah URL situs Anda yang menjalankan Sejoli (dan add-on Sejoli Lisens). Teruskan konstanta SEJOLI_SAMPLE_STORE_URL yang telah kita definisikan sebelumnya di sini.
-- `$plugin_file` → ini adalah file plugin utama. Kami menyarankan Anda menggunakan konstanta ajaib __FILE__ yang disediakan oleh PHP. Perhatikan, bahwa untuk melakukan ini, Anda harus menempatkan cuplikan ini di file plugin utama Anda.
-- `$api_args` → ini adalah serangkaian opsi untuk diteruskan ke pembaru/update:
-- `version` → ini adalah versi plugin yang diinstal saat ini. Ini bukan versi terbaru yang tersedia.
-- `license` → ini adalah kode lisensi yang diambil dari database.
-- `item_name` → ini adalah nama direktori/folder plugin produk Anda.
-- `author` → ini adalah nama orang atau brand yang membuat plugin (Anda)
-
-## Langkah 4 – Buat halaman pengaturan
-
-Agar plugin dapat menerima pembaruan/update, kode lisensi harus diaktifkan. Untuk mengaktifkan kode lisensi, pelanggan harus memasukkan kode di kolom dalam pengaturan plugin Anda; maka lisensi tersebut perlu dikirim ke API Lisensi di web Anda.
-
-Contoh plugin yang disertakan dengan Lisensi menggunakan halaman pengaturan dengan satu kolom input. Hal ini dapat berjalan cukup baik, namun tujuan utamanya adalah untuk tujuan demonstratif. Anda disarankan untuk mengintegrasikan bidang kode lisensi pada halaman pengaturan yang ada.
-
-Kode ini menyiapkan halaman submenu yang disebut “Lisensi Plugin” di bawah menu Plugin.
-
-Ada dua baris di bagian atas fungsi sejoli_sample_license_page:
+Selain itu, dalam file yang sama, ubah domain teks `sejoli-theme-updater` agar sesuai dengan theme Anda. Contoh:
 
 ```bash
-$license = get_option( 'edd_sample_license_key' );
-$status  = get_option( 'edd_sample_license_status' );
+// Strings
+    $strings = array(
+        'theme-license'             => __( 'Theme License', 'sejoli-theme-updater' ),
+	)
 ```
 
-Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi **aktif**. Hal ini agar kita dapat menampilkan tombol **Aktifkan Lisensi** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
+## Pengemasan dan Penjualan
+
+Theme Anda harus di-zip sama seperti theme lainnya, tidak ada perbedaan. Kemudian buat produk baru di Sejoli.
+
+Selesaikan semuanya seperti yang Anda lakukan pada produk biasa, unggah file theme Anda dan berikan harga, dll.
+
+Kemudian pastikan untuk mencentang kotak untuk mengaktifkan lisensi. **Ini adalah kunci untuk proses pembaruan**.
 
 ![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
 
-Idenya di sini adalah pertama-tama kita memasukkan kode lisensi dan klik “Simpan Perubahan”, yang menyebabkan kode lisensi disimpan dalam opsi plugin/theme kami. Setelah opsi disimpan, kami mengklik tombol “Aktifkan Lisensi” untuk memicu panggilan API.
+Sebagian besar pengaturan dalam kotak meta Lisensi dapat diatur sesuai keinginan Anda, namun nomor versi penting. Saat Anda menambah nomor versi, ini akan mengingatkan web pelanggan Anda bahwa ada versi baru. Untuk versi awal Anda, pilih sesuatu dan perbesar hanya ketika tiba waktunya untuk versi baru. Contoh: mulai dari 1.0 dan kemudian lanjutkan ke 1.1 hanya jika Anda ingin semua orang mendapatkan versi baru.
 
-Tombol aktifkan hanyalah sebuah kolom input sederhana dengan tipe “kirim” dan atribut nama yang berbeda dari tombol simpan kita. Namanya harus berbeda-beda agar kita bisa mengetahui kapan tombol aktifkan lisensi diklik.
+## Memperbarui theme Anda
 
+Bila Anda memilih untuk merilis versi baru, ganti file lama dengan yang baru. Kemudian masukkan beberapa teks ke dalam kolom Changelog di tab Auto Updater. Terakhir, tambah nomor versi dan simpan unduhan. Kemudian web pelanggan Anda akan diberitahu bahwa ada versi baru, dan mereka akan dapat mengklik Perbarui.
 
-## Langkah 5 – Aktifkan kode lisensi
-
-Untuk mengaktifkan kode lisensi, kami “mendengarkan” tombol Aktifkan Lisensi diklik lalu ambil nilai yang dimasukkan di bidang kode lisensi dan mengirimkan permintaan aktivasi ke API.
-
-Jika semuanya berjalan dengan benar setelah mengklik tombol “Aktifkan Lisensi”, tombol aktifkan akan diganti dengan kata “aktif”, dan status lisensi akan mencerminkan status yang baru diaktifkan di dashboard web sejoli Anda. Jika terjadi kesalahan saat mengaktifkan kode lisensi, halaman akan dimuat ulang dan parameter kesalahan dan pesan akan ditambahkan ke URL. Kami kemudian dapat menggunakan kait admin_notices (atau metode lain yang berlaku) untuk menampilkan kesalahan kepada pelanggan.
-
-Misalnya, jika pelanggan memasukkan kode lisensi yang tidak valid, pesan kesalahan akan ditampilkan:
-
-![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
-
-Itu saja!
-
-**Catatan penting**
-- Kode yang ditampilkan pada halaman ini murni untuk tujuan demonstratif dan tidak dimaksudkan untuk digunakan apa adanya. Jangan menyalin dan menempelkannya ke plugin Anda dan mengharapkannya berfungsi apa adanya.
+## Catatan penting
+- Kode yang ditampilkan pada halaman ini murni untuk tujuan demonstratif dan tidak dimaksudkan untuk digunakan apa adanya. Jangan menyalin dan menempelkannya ke theme Anda dan mengharapkannya berfungsi apa adanya.
 - Semua nama fungsi yang ditambahkan ke plugin Anda harus mendapatkan awalan unik. Kami telah menggunakan sejoli_sample_ di seluruh contoh ini. Jangan simpan sejoli_sample_ di plugin Anda sendiri, gantilah dengan awalan unik Anda sendiri.
-- Nama konstanta harus diubah. Jangan simpan sebagai SEJOLI_SAMPLE_ITEM_NAME dan SEJOLI_SAMPLE_STORE_URL. Gunakan konstanta unik Anda sendiri.
-- Jika Anda memperluas kelas pembaru dari file selain file plugin utama, tambahkan mendefinisikan `( ‘YOUR_PREFIX_PLUGIN_FILE’, __FILE__ )`; ke file plugin utama, lalu alih-alih memanggil **__FILE__** sebagai parameter kedua dari kelas `SEJOLI_Plugin_Updater` yang baru, panggil `YOUR_PREFIX_PLUGIN_FILE` di sana.
+- Nama konstanta harus diubah. Jangan simpan sebagai SEJOLI_ITEM_NAME dan SEJOLI_STORE_URL. Gunakan konstanta unik Anda sendiri.
