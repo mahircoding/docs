@@ -7,8 +7,8 @@ sidebar_position: 3
 Termasuk dalam pembelian addon plugin Sejoli License Manage Anda adalah sampel plugin yang bisa ditemukan di member-area dalam file zip. Unduh addon beserta sample plugin dari halaman Akun Anda di member-area. Sangat disarankan agar Anda membukanya dan melihatnya secara keseluruhan.
 
 **Ada dua komponen pada updater**:
-- File Sejoli_Plugin_Updater.php. Ini berisi class yang membuat updater berjalan.
-- Kode yang Anda tempatkan di plugin Anda yang memuat updater yang disediakan oleh file class Sejoli_PLugin_Updater.php. Kode ini ada di file sejoli-sample-plugin.php.
+- File `Sejoli_Plugin_Updater.php`. Ini berisi class yang membuat updater berjalan.
+- Kode yang Anda tempatkan di plugin Anda yang memuat updater yang disediakan oleh file class `Sejoli_PLugin_Updater.php`. Kode ini ada di file `sejoli-sample-plugin.php`.
 
 ## Langkah 1 – Tentukan updater constants
 
@@ -31,7 +31,7 @@ Pada file plugin utama Anda, sebaiknya di dekat bagian atas, atau di mana Anda t
 
 ## Langkah 2 – Sertakan class update
 
-**Direkomendasikan:** Karena semakin banyak pengembang plugin yang menggunakan ekstensi Lisensi Perangkat Lunak untuk memberikan pembaruan pada produk mereka, ada risiko “konflik” jika plugin lain menyertakan versi kelas **Sejoli_Plugin_Updater** yang berbeda dari yang Anda kemas dengan plugin Anda. Anda dapat mengganti nama kelas ini menjadi sesuatu yang unik untuk plugin Anda sehingga menghindari konflik. Misalnya, jika nama plugin saya adalah “Widgets Elementor Canggih”, saya dapat mengganti nama `Sejoli_Plugin_Updater` menjadi `WEC_Plugin_Updater` dan mengubah referensi apa pun ke dalamnya.
+**Direkomendasikan:** Karena semakin banyak pengembang plugin yang menggunakan ekstensi Lisensi Perangkat Lunak untuk memberikan pembaruan pada produk mereka, ada risiko “konflik” jika plugin lain menyertakan versi class **Sejoli_Plugin_Updater** yang berbeda dari yang Anda kemas dengan plugin Anda. Anda dapat mengganti nama class ini menjadi sesuatu yang unik untuk plugin Anda sehingga menghindari konflik. Misalnya, jika nama plugin saya adalah “Widgets Elementor Canggih”, saya dapat mengganti nama `Sejoli_Plugin_Updater` menjadi `WEC_Plugin_Updater` dan mengubah referensi apa pun ke dalamnya.
 
 Sistem pembaruan itu sendiri terdapat di dalam file bernama `Sejoli_Plugin_Updater.php`. File ini dapat ditemukan di folder sample plugin di dalam `sejoli-sample-plugin/`. Anda perlu menyalin file ini ke folder plugin Anda sendiri. Itu bisa berada di folder utama yang sama dengan file plugin Anda, atau di subdirektori seperti `/includes/`. Apa pun yang terjadi, Anda perlu merujuknya dengan benar ke dalam kode, seperti:
 
@@ -59,3 +59,32 @@ $sejoli_updater = new Sejoli_Plugin_Updater( SEJOLI_SAMPLE_STORE_URL, __FILE__, 
 ‘penulis’ => ‘Nama Penulis’, → penulis plugin ini
 ) );
 ```
+
+Kode lisensi dalam contoh ini disimpan dalam opsi/wp_options yang disebut `sejoli_sample_license_key`. Anda perlu menyesuaikan ini untuk mengambil kode lisensi dari opsi yang telah Anda siapkan untuk plugin Anda. Jika Anda memerlukan bantuan dalam menyiapkan opsi untuk menyimpan kode lisensi, lihat contoh plugin, karena plugin tersebut menyertakan halaman pengaturan yang berfungsi penuh.
+
+*Beberapa parameter yang diteruskan ke class Sejoli_Plugin_Updater*:
+`$api_url` → ini adalah URL situs Anda yang menjalankan Sejoli (dan add-on Sejoli Lisens). Teruskan konstanta SEJOLI_SAMPLE_STORE_URL yang telah kita definisikan sebelumnya di sini.
+`$plugin_file → ini adalah file plugin utama. Kami menyarankan Anda menggunakan konstanta ajaib __FILE__ yang disediakan oleh PHP. Perhatikan, bahwa untuk melakukan ini, Anda harus menempatkan cuplikan ini di file plugin utama Anda.
+`$api_args` → ini adalah serangkaian opsi untuk diteruskan ke pembaru/update:
+`version` → ini adalah versi plugin yang diinstal saat ini. Ini bukan versi terbaru yang tersedia.
+`license` → ini adalah kode lisensi yang diambil dari database.
+`item_name` → ini adalah nama direktori/folder plugin produk Anda.
+`author` → ini adalah nama orang atau brand yang membuat plugin (Anda)
+
+## Langkah 4 – Buat halaman pengaturan
+
+Agar plugin dapat menerima pembaruan/update, kode lisensi harus diaktifkan. Untuk mengaktifkan kode lisensi, pelanggan harus memasukkan kode di kolom dalam pengaturan plugin Anda; maka lisensi tersebut perlu dikirim ke API Lisensi di web Anda.
+
+Contoh plugin yang disertakan dengan Lisensi menggunakan halaman pengaturan dengan satu kolom input. Hal ini dapat berjalan cukup baik, namun tujuan utamanya adalah untuk tujuan demonstratif. Anda disarankan untuk mengintegrasikan bidang kode lisensi pada halaman pengaturan yang ada.
+
+Kode ini menyiapkan halaman submenu yang disebut “Lisensi Plugin” di bawah menu Plugin.
+
+Ada dua baris di bagian atas fungsi sejoli_sample_license_page:
+
+```bash
+$license = get_option( 'edd_sample_license_key' );
+$status  = get_option( 'edd_sample_license_status' );
+```
+
+Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi **aktif**. Hal ini agar kita dapat menampilkan tombol **Aktifkan Lisensi** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
+
