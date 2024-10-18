@@ -17,7 +17,8 @@ API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan
 Masing-masing metode di bawah ini bekerja dengan cara yang sama. URL situs web tempat Anda menginstal plugin Sejoli + Sejoli License Manage akan bertindak sebagai titik akhir API. Semua permintaan ke API dilakukan sebagai permintaan GET atau POST dan ikuti formulir ini:
 
 ```bash
-https://YOURSITE.com/?sejoli_action={request type}&item_name={slug product}&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url={url of the site being licensed}
+https://YOURSITE.com/?sejoli_action={request type}&item_name={slug product
+}&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url={url of the site being licensed}
 ```
 
 Build your site **for production**:
