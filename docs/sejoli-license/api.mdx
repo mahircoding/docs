@@ -153,11 +153,11 @@ Jika lisensinya tidak valid, responsnya adalah:
 
 Kemungkinan status lisensi:
 
-`disabled` → Kunci lisensi dicabut
-`expired` → Lisensi telah kedaluwarsa
-`key_mismatch` → Lisensi tidak berlaku untuk produk ini
-`id_item_id` → ID Item tidak valid
-`item_name_mismatch` → Lisensi tidak berlaku untuk produk ini
+- `disabled` → Kunci lisensi dicabut
+- `expired` → Lisensi telah kedaluwarsa
+- `key_mismatch` → Lisensi tidak berlaku untuk produk ini
+- `id_item_id` → ID Item tidak valid
+- `item_name_mismatch` → Lisensi tidak berlaku untuk produk ini
 
 ## Mendapatkan informasi versi
 
@@ -197,6 +197,7 @@ Responsnya akan berupa objek JSON yang terlihat seperti ini:
 - Properti section adalah array berseri yang mencakup deskripsi produk lengkap dan log perubahan. Jika menggunakan penguraian ReadMe.txt untuk plugin WordPress, itu juga akan menyertakan informasi tambahan yang diberikan melalui file readme.
 
 **Bagaimana cara mencegah akses ke perangkat lunak, plugin, atau tema saya jika lisensinya sudah habis masa berlakunya atau dinonaktifkan?**
+
 Status lisensi ini tidak mempengaruhi perangkat lunak/app, hanya menunjukkan status lisensinya. Terserah pengembang untuk membaca status itu untuk melakukan sesuatu. Misalnya, jika lisensi sudah Kedaluwarsa, perangkat lunak/app dapat memilih untuk berhenti bekerja atau memilih untuk memunculkan peringatan.
 
 Satu pengecualian untuk hal ini adalah ketika melihat lisensi yang kedaluwarsa atau dinonaktifkan melekat pada unduhan, tautan unduhan, termasuk tautan get_version, tidak akan berfungsi. Oleh karena itu, pembaruan tidak lagi berfungsi melalui respons get_version.
