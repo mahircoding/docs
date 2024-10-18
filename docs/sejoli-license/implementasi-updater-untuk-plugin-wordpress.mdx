@@ -1,0 +1,25 @@
+---
+sidebar_position: 3
+---
+
+# Implementasi Updater untuk Plugin WordPress
+
+Termasuk dalam pembelian addon plugin Sejoli License Manage Anda adalah sampel plugin yang bisa ditemukan di member-area dalam file zip. Unduh addon beserta sample plugin dari halaman Akun Anda di member-area. Sangat disarankan agar Anda membukanya dan melihatnya secara keseluruhan.
+
+**Ada dua komponen pada updater**:
+- File Sejoli_Plugin_Updater.php. Ini berisi class yang membuat updater berjalan.
+- Kode yang Anda tempatkan di plugin Anda yang memuat updater yang disediakan oleh file class Sejoli_PLugin_Updater.php. Kode ini ada di file sejoli-sample-plugin.php.
+
+## Langkah 1 – Tentukan updater constants
+
+Pada file plugin utama Anda, sebaiknya di dekat bagian atas, atau di mana Anda telah menentukan constants lain, tambahkan kode berikut:
+
+```bash
+// ini adalah URL yang di-ping oleh update/pemeriksa lisensi web. Ini harus menjadi URL situs dengan addon Sejoli License terpasang mendefinisikan `( 'SEJOLI_SAMPLE_STORE_URL', 'https://situsanda.com' )`;
+
+// PENTING: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
+
+// SLUG unduhan. Ini adalah nama direktori/folder plugin Anda dan harus cocok dengan SLUG unduhan yang terlihat di daftar Unduhan Anda (lihat contoh di bawah) mendefinisikan `('SEJOLI_SAMPLE_ITEM_SLUG', 'element-widgets' )`;
+
+// PENTING: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
+```
