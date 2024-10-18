@@ -2,9 +2,9 @@
 sidebar_position: 3
 ---
 
-# Implementasi Updater untuk Plugin WordPress
+# Implementasi Updater untuk Theme WordPress
 
-Termasuk dalam pembelian addon plugin Sejoli License Manage Anda adalah sampel plugin yang bisa ditemukan di member-area dalam file zip. Unduh addon beserta sample plugin dari halaman Akun Anda di member-area. Sangat disarankan agar Anda membukanya dan melihatnya secara keseluruhan.
+Dengan addon Sejoli Lisensi, Anda dapat mengatur peningkatan otomatis (auto update) untuk theme. Ini tidak berarti bahwa theme pelanggan Anda akan diperbarui dengan sendirinya, melainkan pelanggan Anda dapat memperbarui theme mereka menggunakan alat pembaruan WordPress tradisional, seolah-olah theme tersebut di hosting di WordPress.org.
 
 **Ada dua komponen pada updater**:
 - File `Sejoli_Plugin_Updater.php`. Ini berisi class yang membuat updater berjalan.
@@ -91,7 +91,7 @@ Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya.
 
 ![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
 
-Idenya di sini adalah pertama-tama kita memasukkan kode lisensi dan klik “Simpan Perubahan”, yang menyebabkan kode lisensi disimpan dalam opsi plugin/tema kami. Setelah opsi disimpan, kami mengklik tombol “Aktifkan Lisensi” untuk memicu panggilan API.
+Idenya di sini adalah pertama-tama kita memasukkan kode lisensi dan klik “Simpan Perubahan”, yang menyebabkan kode lisensi disimpan dalam opsi plugin/theme kami. Setelah opsi disimpan, kami mengklik tombol “Aktifkan Lisensi” untuk memicu panggilan API.
 
 Tombol aktifkan hanyalah sebuah kolom input sederhana dengan tipe “kirim” dan atribut nama yang berbeda dari tombol simpan kita. Namanya harus berbeda-beda agar kita bisa mengetahui kapan tombol aktifkan lisensi diklik.
 
