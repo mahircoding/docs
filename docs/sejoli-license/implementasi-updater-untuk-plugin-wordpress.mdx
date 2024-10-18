@@ -64,7 +64,7 @@ Kode lisensi dalam contoh ini disimpan dalam opsi/wp_options yang disebut `sejol
 
 *Beberapa parameter yang diteruskan ke class Sejoli_Plugin_Updater*:
 `$api_url` → ini adalah URL situs Anda yang menjalankan Sejoli (dan add-on Sejoli Lisens). Teruskan konstanta SEJOLI_SAMPLE_STORE_URL yang telah kita definisikan sebelumnya di sini.
-`$plugin_file → ini adalah file plugin utama. Kami menyarankan Anda menggunakan konstanta ajaib __FILE__ yang disediakan oleh PHP. Perhatikan, bahwa untuk melakukan ini, Anda harus menempatkan cuplikan ini di file plugin utama Anda.
+`$plugin_file` → ini adalah file plugin utama. Kami menyarankan Anda menggunakan konstanta ajaib __FILE__ yang disediakan oleh PHP. Perhatikan, bahwa untuk melakukan ini, Anda harus menempatkan cuplikan ini di file plugin utama Anda.
 `$api_args` → ini adalah serangkaian opsi untuk diteruskan ke pembaru/update:
 `version` → ini adalah versi plugin yang diinstal saat ini. Ini bukan versi terbaru yang tersedia.
 `license` → ini adalah kode lisensi yang diambil dari database.
@@ -88,3 +88,27 @@ $status  = get_option( 'edd_sample_license_status' );
 
 Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi **aktif**. Hal ini agar kita dapat menampilkan tombol **Aktifkan Lisensi** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
 
+![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
+
+Idenya di sini adalah pertama-tama kita memasukkan kode lisensi dan klik “Simpan Perubahan”, yang menyebabkan kode lisensi disimpan dalam opsi plugin/tema kami. Setelah opsi disimpan, kami mengklik tombol “Aktifkan Lisensi” untuk memicu panggilan API.
+
+Tombol aktifkan hanyalah sebuah kolom input sederhana dengan tipe “kirim” dan atribut nama yang berbeda dari tombol simpan kita. Namanya harus berbeda-beda agar kita bisa mengetahui kapan tombol aktifkan lisensi diklik.
+
+
+## Langkah 5 – Aktifkan kode lisensi
+
+Untuk mengaktifkan kode lisensi, kami “mendengarkan” tombol Aktifkan Lisensi diklik lalu ambil nilai yang dimasukkan di bidang kode lisensi dan mengirimkan permintaan aktivasi ke API.
+
+Jika semuanya berjalan dengan benar setelah mengklik tombol “Aktifkan Lisensi”, tombol aktifkan akan diganti dengan kata “aktif”, dan status lisensi akan mencerminkan status yang baru diaktifkan di dashboard web sejoli Anda. Jika terjadi kesalahan saat mengaktifkan kode lisensi, halaman akan dimuat ulang dan parameter kesalahan dan pesan akan ditambahkan ke URL. Kami kemudian dapat menggunakan kait admin_notices (atau metode lain yang berlaku) untuk menampilkan kesalahan kepada pelanggan.
+
+Misalnya, jika pelanggan memasukkan kode lisensi yang tidak valid, pesan kesalahan akan ditampilkan:
+
+![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
+
+Itu saja!
+
+**Catatan penting**
+- Kode yang ditampilkan pada halaman ini murni untuk tujuan demonstratif dan tidak dimaksudkan untuk digunakan apa adanya. Jangan menyalin dan menempelkannya ke plugin Anda dan mengharapkannya berfungsi apa adanya.
+- Semua nama fungsi yang ditambahkan ke plugin Anda harus mendapatkan awalan unik. Kami telah menggunakan sejoli_sample_ di seluruh contoh ini. Jangan simpan sejoli_sample_ di plugin Anda sendiri, gantilah dengan awalan unik Anda sendiri.
+- Nama konstanta harus diubah. Jangan simpan sebagai SEJOLI_SAMPLE_ITEM_NAME dan SEJOLI_SAMPLE_STORE_URL. Gunakan konstanta unik Anda sendiri.
+- Jika Anda memperluas kelas pembaru dari file selain file plugin utama, tambahkan mendefinisikan `( ‘YOUR_PREFIX_PLUGIN_FILE’, __FILE__ )`; ke file plugin utama, lalu alih-alih memanggil **__FILE__** sebagai parameter kedua dari kelas `SEJOLI_Plugin_Updater` yang baru, panggil `YOUR_PREFIX_PLUGIN_FILE` di sana.
