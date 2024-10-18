@@ -14,12 +14,23 @@ API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan
 - `check_license` → Digunakan untuk memeriksa dari jarak jauh apakah kode lisensi diaktifkan, valid, dan tidak kedaluwarsa
 - `get_version` → Digunakan untuk mengambil informasi versi terbaru suatu produk dari jarak jauh
 
-Masing-masing metode di bawah ini bekerja dengan cara yang sama. URL situs web tempat Anda menginstal plugin Sejoli + Sejoli License Manage akan bertindak sebagai titik akhir API. Semua permintaan ke API dilakukan sebagai permintaan GET atau POST dan ikuti formulir ini:
+Masing-masing metode di bawah ini bekerja dengan cara yang sama. URL situs web tempat Anda menginstal plugin Sejoli + Sejoli License Manage akan bertindak sebagai titik akhir API. Semua permintaan ke API dilakukan sebagai permintaan `GET` atau `POST` dan ikuti format ini:
 
 ```bash
 https://YOURSITE.com/?sejoli_action={request type}&item_name={slug product
 }&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url={url of the site being licensed}
 ```
+
+**Permintaan tersebut memerlukan tiga parameter dan memiliki satu parameter opsional**:
+
+- `sejoli_action` → Ini adalah jenis permintaan (lihat di bawah)
+- `item_name` → Merupakan nama directory/folder plugin atau theme.
+- `lisensi` → Ini adalah kode lisensi yang Anda gunakan untuk melakukan tindakan
+- `url` → (opsional) Ini adalah URL situs asal permintaan API
+
+:::tip Tip URL untuk Perangkat Lunak Desktop :
+Parameter url tidak terbatas pada URL. Misalnya perangkat lunak desktop dapat menggunakan parameter url untuk ID Sistem atau teks unik apa pun.
+:::
 
 Build your site **for production**:
 
