@@ -2,6 +2,8 @@
 sidebar_position: 2
 ---
 
+# Cara Penggunaan
+
 Tutorial ini akan memandu Anda melalui petunjuk pengaturan untuk add-on Sejoli License.
 
 :::tip Add-on Sejoli License
@@ -21,3 +23,38 @@ Di bawah ini adalah tangkapan layar bagian antarmuka pengguna dalam satu produk 
 **1. Pengaturan Lisensi**
 
 ![Pengaturan Lisensi](./img/Xnapper-2024-10-17-12.55.05.png)
+
+Pada layar edit produk tipe produk digital bagian tab Lisensi muncul ada kotak “Jumlah Penggunaan Lisensi” baru yang ditambahkan. Semua pengaturan untuk lisensi khusus untuk produk saat ini akan dilakukan di kotak ini.
+
+:::tip Jumlah Penggunaan Lisensi
+Ini adalah berapa kali maksimum setiap kode lisensi dapat diaktifkan. Jika Anda ingin membatasi kode lisensi hingga 10 penggunaan per pelanggan, masukkan 10. Jika Anda tidak ingin menerapkan batasan batas apa pun, biarkan kosong atau masukkan 0.
+:::
+
+**2. License ID**
+
+Pengaturan license ID untuk membatasi kode license agar tidak bisa dipakai pada produk lain dan sebagai slug plugin dan theme untuk auto updater.
+
+![License ID](./img/Xnapper-2024-10-17-13.09.48.png)
+
+:::tip
+Jika membuat produk yang sama tapi beda jumlah aktivasi lisensi maka ID Lisensi tetap sama
+:::
+
+**3. Auto Updater**
+
+Pengaturan Auto Update pada tab Auto Updater, ada beberapa bagian. diantaranya:
+
+![Auto Updater](./img/Xnapper-2024-10-17-13.18.18.png)
+
+
+## Masukkan versi update
+
+Ini sesuai dengan nomor versi plugin atau theme Anda saat ini yang tersedia. Jika Anda menjual versi 1.0, masukkan 1.0 di sini. Jika versi yang tersedia saat ini adalah 1.5, masukkan 1.5 di sini. Nomor versi ini digunakan khusus untuk plugin dan tema WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis aplikasi lain dengan memanfaatkan API yang disertakan.
+
+## Upload File Update
+
+Ini memungkinkan Anda mengatur file .zip (atau mungkin format lain) yang dikirimkan ke pengguna saat melakukan auto update. Opsi ini digunakan khusus untuk plugin dan theme WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis app/perangkat lunak lain dengan memanfaatkan API yang disertakan. Jika Anda menjual plugin atau theme WordPress, opsi ini harus disetel ke .zip yang hanya berisi file plugin atau tema yang diperlukan. File .zip ini diatur melalui bagian konfigurasi Unduh File utama.
+
+## Changelog
+
+Ini adalah dokumentasi perubahan yang telah dilakukan pada setiap versi plugin/theme/perangkat lunak. Kapan pun versi baru dirilis, Anda harus menambahkan catatan tentang apa yang berubah di sini. Catatan ini akan ditampilkan dalam pemberitahuan pemutakhiran “Yang Baru” yang dapat dilihat pengguna saat memutakhirkan plugin atau theme WordPress mereka. Jika Anda tidak menjual plugin atau tema WordPress, log perubahan ini masih dapat digunakan melalui API yang disertakan.
