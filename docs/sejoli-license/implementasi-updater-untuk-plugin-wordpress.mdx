@@ -15,11 +15,47 @@ Termasuk dalam pembelian addon plugin Sejoli License Manage Anda adalah sampel p
 Pada file plugin utama Anda, sebaiknya di dekat bagian atas, atau di mana Anda telah menentukan constants lain, tambahkan kode berikut:
 
 ```bash
-// ini adalah URL yang di-ping oleh update/pemeriksa lisensi web. Ini harus menjadi URL situs dengan addon Sejoli License terpasang mendefinisikan `( 'SEJOLI_SAMPLE_STORE_URL', 'https://situsanda.com' )`;
+**ini adalah URL yang di-ping oleh update/pemeriksa lisensi web**. Ini harus menjadi URL situs dengan addon Sejoli License terpasang mendefinisikan ( 'SEJOLI_SAMPLE_STORE_URL', 'https://situsanda.com' );
 
-// PENTING: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
+**PENTING**: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
 
-// SLUG unduhan. Ini adalah nama direktori/folder plugin Anda dan harus cocok dengan SLUG unduhan yang terlihat di daftar Unduhan Anda (lihat contoh di bawah) mendefinisikan `('SEJOLI_SAMPLE_ITEM_SLUG', 'element-widgets' )`;
+** SLUG unduhan**. Ini adalah nama direktori/folder plugin Anda dan harus cocok dengan SLUG unduhan yang terlihat di daftar Unduhan Anda (lihat contoh di bawah) mendefinisikan ('SEJOLI_SAMPLE_ITEM_SLUG', 'element-widgets' );
 
-// PENTING: ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
+**PENTING:** ubah nama constants ini menjadi sesuatu yang unik untuk mencegah konflik dengan plugin lain yang menggunakan sistem ini
+```
+
+`SEJOLI_SAMPLE_STORE_URL` harus disetel ke URL web Anda yang telah menginstal Sejoli + Addon Sejoli License.
+
+`SEJOLI_SAMPLE_ITEM_NAME` harus ditetapkan nama direktori/folder plugin Anda. Setiap produk memiliki nama direktori/folder plugin yang berbeda.
+
+
+## Langkah 2 – Sertakan class update
+
+**Direkomendasikan:** Karena semakin banyak pengembang plugin yang menggunakan ekstensi Lisensi Perangkat Lunak untuk memberikan pembaruan pada produk mereka, ada risiko “konflik” jika plugin lain menyertakan versi kelas **Sejoli_Plugin_Updater** yang berbeda dari yang Anda kemas dengan plugin Anda. Anda dapat mengganti nama kelas ini menjadi sesuatu yang unik untuk plugin Anda sehingga menghindari konflik. Misalnya, jika nama plugin saya adalah “Widgets Elementor Canggih”, saya dapat mengganti nama `Sejoli_Plugin_Updater` menjadi `WEC_Plugin_Updater` dan mengubah referensi apa pun ke dalamnya.
+
+Sistem pembaruan itu sendiri terdapat di dalam file bernama `Sejoli_Plugin_Updater.php`. File ini dapat ditemukan di folder sample plugin di dalam `sejoli-sample-plugin/`. Anda perlu menyalin file ini ke folder plugin Anda sendiri. Itu bisa berada di folder utama yang sama dengan file plugin Anda, atau di subdirektori seperti `/includes/`. Apa pun yang terjadi, Anda perlu merujuknya dengan benar ke dalam kode, seperti:
+
+```bash
+if ( ! class_exists( 'Sejoli_Plugin_Updater' ) ) {
+	// memuat update jika belum ada
+	include dirname( __FILE__ ) . '/Sejoli_Plugin_Updater.php';
+}
+```
+
+Anda mungkin perlu menyesuaikan jalur file, tergantung di mana Anda memutuskan untuk menempatkan file dalam struktur folder plugin Anda.
+
+## Langkah 3 – Buat instance kelas pembaru
+
+Membuat instance class update seperti ini:
+
+```bash
+**ambil kode lisensi kami dari DB**
+$license_key = trim( get_option( ‘sejoli_sample_license_key’ ) );
+**siapkan update**
+$sejoli_updater = new Sejoli_Plugin_Updater( SEJOLI_SAMPLE_STORE_URL, __FILE__, array(
+‘version’ => ‘1.0’, → nomor versi saat ini
+‘license’ => $license_key, → kode lisensi (menggunakan get_option di atas untuk mengambil dari DB)
+‘item_id’ => SEJOLI_SAMPLE_ITEM_NAME, → id plugin ini
+‘penulis’ => ‘Nama Penulis’, → penulis plugin ini
+) );
 ```
