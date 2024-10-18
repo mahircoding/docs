@@ -32,22 +32,171 @@ https://YOURSITE.com/?sejoli_action={request type}&item_name={slug product
 Parameter url tidak terbatas pada URL. Misalnya perangkat lunak desktop dapat menggunakan parameter url untuk ID Sistem atau teks unik apa pun.
 :::
 
-Build your site **for production**:
+## Aktifkan Kode Lisensi
+
+Untuk mengaktifkan lisensi dari jarak jauh, URL yang akan Anda gunakan adalah:
 
 ```bash
-npm run build
+https://YOURSITE.com/?sejoli_action=activate_license&item_name=element-widgets
+&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url=http://licensedsite.com
 ```
 
-The static files are generated in the `build` folder.
+Parameter lisensi diatur ke kode lisensi yang ingin Anda aktifkan.
 
-## Deploy your site
-
-Test your production build locally:
+Respons atas permintaan ini adalah objek JSON. Jika lisensi telah berhasil diaktifkan maka responnya adalah:
 
 ```bash
-npm run serve
+{
+    "success": true,
+    "license": "valid",
+    "item_id": false (or Item ID if passed)
+    "item_name": "Sejoli Product Name",
+    "license_limit": 0,
+    "site_count": 2,
+    "expires": "2020-06-30 23:59:59",
+    "activations_left": "unlimited",
+    "checksum": "<md5 checksum>",
+    "payment_id": 12345,
+    "order_parent_id": 0,
+    "customer_name": "John Doe",
+    "customer_email": "john@sample.org"
+}
 ```
 
-The `build` folder is now served at [http://localhost:3000/](http://localhost:3000/).
+Jika lisensi tidak valid dan gagal diaktifkan, responsnya adalah:
 
-You can now deploy the `build` folder **almost anywhere** easily, **for free** or very small cost (read the **[Deployment Guide](https://docusaurus.io/docs/deployment)**).
+```bash
+{
+    "success": false,
+    "license": "invalid",
+    "item_id": false (or Item ID if passed)
+    "item_name": "Sejoli Product Name",
+    "error": "expired",
+    "expires": "2020-04-28 23:59:59",
+    "license_limit": 0,
+    "site_count": 1,
+    "activations_left": "unlimited",
+    "checksum": "<md5 checksum>",
+    "payment_id": 12345,
+    "order_parent_id": 0,
+    "customer_name": "John Doe",
+    "customer_email": "john@sample.com"
+}
+```
+
+Kemungkinan kesalahan:
+
+`missing` → Lisensi tidak ada
+`missing_url` → URL tidak disediakan
+`dinonaktifkan` → Kunci lisensi dicabut
+`no_activations_left` → Tidak ada aktivasi tersisa
+`expired` → Lisensi telah kedaluwarsa
+`key_mismatch` → Lisensi tidak berlaku untuk produk ini
+`id_item_id` → ID Item tidak valid
+`item_name_mismatch` → Lisensi tidak berlaku untuk produk ini
+`site_inactive` → ​​Situs tidak aktif untuk lisensi ini
+`invalid` → Kunci lisensi tidak cocok
+`valid` → Lisensi valid
+
+## Periksa apakah Lisensinya valid
+
+Memeriksa apakah suatu lisensi valid dan tidak expired sangat mirip dengan aktivasi. Permintaan ini biasanya dilakukan jika Anda perlu memastikan bahwa suatu lisensi masih berlaku setelah diaktifkan. Lisensi akan habis masa berlakunya setelah satu tahun (secara default), jadi inilah yang akan Anda gunakan untuk memeriksa apakah lisensi telah habis masa berlakunya.
+
+Untuk memeriksa lisensi dari jarak jauh, URL yang akan Anda gunakan adalah:
+
+```bash
+https://YOURSITE.com/?sejoli_action=check_license&element-widgets
+&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url=http://licensedsite.com
+```
+
+Parameter lisensi diatur ke kode lisensi yang ingin Anda periksa.
+Respons atas permintaan ini adalah objek JSON. Jika lisensinya aktif dan masih berlaku maka responnya adalah:
+
+```bash
+{
+    "success": true,
+    "license": "valid",
+    "item_id": false, (or Item ID if passed)
+    "item_name": "Sejoli Product Name",
+    "checksum": "",
+    "expires": "2020-06-30 23:59:59",
+    "payment_id": 12345,
+    "order_parent_id": 0,
+    "customer_name": "John Doe",
+    "customer_email": "john@example.org",
+    "license_limit": 0,
+    "site_count": 2,
+    "activations_left": "unlimited",
+}
+```
+
+Jika lisensinya tidak valid, responsnya adalah:
+
+```bash
+{
+    "success": false,
+    "license": "invalid",
+    "item_id": false, (or Item ID if passed)
+    "item_name": "Sejoli Product Name",
+    "expires": "2014-10-23 00:00:00",
+    "license_limit": 0,
+    "site_count": 1,
+    "activations_left": "unlimited",
+    "checksum": "checksum",
+    "payment_id": 54224,
+    "order_parent_id": 0,
+    "customer_name": "John Doe",
+    "customer_email": "john@sample.com",
+    "price_id": "2"
+}
+```
+
+Kemungkinan status lisensi:
+
+`disabled` → Kunci lisensi dicabut
+`expired` → Lisensi telah kedaluwarsa
+`key_mismatch` → Lisensi tidak berlaku untuk produk ini
+`id_item_id` → ID Item tidak valid
+`item_name_mismatch` → Lisensi tidak berlaku untuk produk ini
+
+## Mendapatkan informasi versi
+
+Mengambil informasi versi memungkinkan Anda mengambil data tentang nomor versi terbaru dari jarak jauh, termasuk log perubahan dan tautan unduh untuk file pembaruan.
+
+Untuk mendapatkan informasi versi kunci lisensi:
+
+```bash
+https://YOURSITE.com/?sejoli_action=get_version&element-widgets
+&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url=http://licensedsite.com
+```
+
+Responsnya akan berupa objek JSON yang terlihat seperti ini:
+
+```bash
+{
+    “new_version”: “1.0.0”,
+    “version”: “1.0.0”,
+    “name”: “Element Widgets (3 Domain)”,
+    “slug”: “element-widgets”,
+    “requires”: 6.1,
+    “requires_php”: 7.4,
+    “url”: “https://membership.com/product/element-widgets-3-domain/?changelog=1”,
+    “last_updated”: “2024-10-17 14:02:15”,
+    “homepage”: “https://membership.com/product/element-widgets-3-domain/”,
+    “package”: “https://membership.com/sejoli-sl/package_download/MTcyOTMwNDIwNjowMDAwMDcyNjUxLUNDUzVULVROWjFMLUpFWE4zLTFPMENEOjcyNjpkMjAwNjQxNDdkZDZmMmQwZjU5OWVjNjhkMmIxOGMwYTpodHRwc0AvL3Byb2plY3RzLmxvY2FsOjA=”,
+    “download_link”: “https://membership.com/sejoli-sl/package_download/MTcyOTMwNDIwNjowMDAwMDcyNjUxLUNDUzVULVROWjFMLUpFWE4zLTFPMENEOjcyNjpkMjAwNjQxNDdkZDZmMmQwZjU5OWVjNjhkMmIxOGMwYTpodHRwc0AvL3Byb2plY3RzLmxvY2FsOjA=”,
+    “sections”: “a:2:{s:11:\”description\”;s:0:\”\”;s:9:\”changelog\”;s:0:\”\”;}”,
+    “banners”: “a:2:{s:4:\”high\”;s:0:\”\”;s:3:\”low\”;s:0:\”\”;}”,
+    “icons”: “a:0:{}”
+}
+```
+
+**Catatan mengenai tanggapan**:
+- Jika tidak ada kode lisensi yang diberikan dalam permintaan get_version, informasi versi tetap dikembalikan; namun, nilai url paket dan unduhan akan kosong. Sebaliknya, jika kode lisensi diberikan tetapi bukan milik item_name dalam permintaan, respons kesalahan akan dikembalikan dengan alasan sebagai nilai pesan.
+- Download_link akan disertakan jika file ada terlepas dari status lisensinya. Namun pengunduhan tidak akan berfungsi kecuali lisensinya aktif. Hal ini memungkinkan situs yang lisensinya telah habis masa berlakunya, untuk memperbaruinya, namun tidak perlu menunggu cache pembaruan dihapus sebelum mendapatkan pembaruan.
+- Properti section adalah array berseri yang mencakup deskripsi produk lengkap dan log perubahan. Jika menggunakan penguraian ReadMe.txt untuk plugin WordPress, itu juga akan menyertakan informasi tambahan yang diberikan melalui file readme.
+
+**Bagaimana cara mencegah akses ke perangkat lunak, plugin, atau tema saya jika lisensinya sudah habis masa berlakunya atau dinonaktifkan?**
+Status lisensi ini tidak mempengaruhi perangkat lunak/app, hanya menunjukkan status lisensinya. Terserah pengembang untuk membaca status itu untuk melakukan sesuatu. Misalnya, jika lisensi sudah Kedaluwarsa, perangkat lunak/app dapat memilih untuk berhenti bekerja atau memilih untuk memunculkan peringatan.
+
+Satu pengecualian untuk hal ini adalah ketika melihat lisensi yang kedaluwarsa atau dinonaktifkan melekat pada unduhan, tautan unduhan, termasuk tautan get_version, tidak akan berfungsi. Oleh karena itu, pembaruan tidak lagi berfungsi melalui respons get_version.
