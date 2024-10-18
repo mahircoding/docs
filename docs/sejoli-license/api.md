@@ -4,9 +4,8 @@ sidebar_position: 1
 
 # Deploy your site
 
-Docusaurus is a **static-site-generator** (also called **[Jamstack](https://jamstack.org/)**).
+API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan kode lisensi dari jarak jauh, memeriksa apakah kode tersebut valid (dan tidak kedaluwarsa/expired), dan juga mengambil informasi tentang versi plugin/theme/app. API ini dapat diimplementasikan dengan sebagian besar perangkat lunak/app, bukan hanya Plugin dan Theme WordPress.
 
-It builds your site as simple **static HTML, JavaScript and CSS files**.
 
 ## Build your site
 

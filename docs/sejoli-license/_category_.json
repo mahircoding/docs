@@ -1,7 +1,8 @@
 {
-  "label": "API",
+  "label": "Sejoli License",
   "position": 4,
   "link": {
-    "type": "generated-index"
+    "type": "generated-index",
+    "description": "Sejoli License - Activating, Checking and Deactivating License Keys in WordPress Plugins/Themes/App/Desktop"
   }
 }
