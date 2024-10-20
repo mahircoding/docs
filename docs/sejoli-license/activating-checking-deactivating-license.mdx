@@ -1,0 +1,158 @@
+---
+sidebar_position: 3
+---
+
+# Activating, Checking dan Deactivating License di Plugin WordPress
+
+## Activating
+Dengan Lisensi, agar kode lisensi dapat dimanfaatkan sepenuhnya, kode tersebut harus diaktifkan. Hal ini dapat dilakukan melalui:
+
+Pembeli dapat mengaktifkan lisensi dari jarak jauh melalui sistem di plugin/tema/app Anda yang menggunakan API untuk memicu aktivasi.
+
+**Catatan:** contoh plugin dan implementasi yang ditunjukkan dalam dokumen ini adalah murni contoh. Implementasi Lisensi mengambil sampel ini dan mengintegrasikannya dengan mulus ke halaman pengaturan plugin Anda.
+
+Dalam dokumentasi ini, kami akan menunjukkan cara mengaktifkan lisensi dari jarak jauh melalui sistem yang ditambahkan ke plugin WordPress Anda. Kode contoh yang kami tunjukkan kepada Anda dalam contoh ini adalah kode persis sama yang disertakan dengan contoh plugin dan tema, tersedia untuk diunduh setelah membeli addon sejoli license.
+
+Ada dua komponen utama untuk mengaktifkan lisensi via API:
+- **Menyimpan kode lisensi** dalam data (opsi theme atau plugin)
+- **Mengirim kode lisensi** yang disimpan melalui API ke web untuk verifikasi dan aktivasi
+
+Saat lisensi diaktifkan melalui API, status lisensi di dashboard web Anda akan diperbarui dari 'inactive' (keadaan default) menjadi 'active'.
+
+Pertama mari kita lihat cara membuat halaman opsi sederhana untuk menyimpan lisensi kita.
+
+```bash
+<?php
+function edd_sample_license_menu() {
+	add_plugins_page( 'Plugin License', 'Plugin License', 'manage_options', EDD_SAMPLE_PLUGIN_LICENSE_PAGE, 'edd_sample_license_page' );
+}
+add_action('admin_menu', 'edd_sample_license_menu');
+
+function edd_sample_license_page() {
+	$license = get_option( 'edd_sample_license_key' );
+	$status  = get_option( 'edd_sample_license_status' );
+	?>
+	<div class="wrap">
+		<h2><?php _e('Plugin License Options'); ?></h2>
+		<form method="post" action="options.php">
+
+			<?php settings_fields('edd_sample_license'); ?>
+
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row" valign="top">
+							<?php _e('License Key'); ?>
+						</th>
+						<td>
+							<input id="edd_sample_license_key" name="edd_sample_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
+							<label class="description" for="edd_sample_license_key"><?php _e('Enter your license key'); ?></label>
+						</td>
+					</tr>
+					<?php if( false !== $license ) { ?>
+						<tr valign="top">
+							<th scope="row" valign="top">
+								<?php _e('Activate License'); ?>
+							</th>
+							<td>
+								<?php if( $status !== false && $status == 'valid' ) { ?>
+									<span style="color:green;"><?php _e('active'); ?></span>
+									<?php wp_nonce_field( 'edd_sample_nonce', 'edd_sample_nonce' ); ?>
+									<input type="submit" class="button-secondary" name="edd_license_deactivate" value="<?php _e('Deactivate License'); ?>"/>
+								<?php } else {
+									wp_nonce_field( 'edd_sample_nonce', 'edd_sample_nonce' ); ?>
+									<input type="submit" class="button-secondary" name="edd_license_activate" value="<?php _e('Activate License'); ?>"/>
+								<?php } ?>
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+			<?php submit_button(); ?>
+
+		</form>
+	<?php
+}
+
+function edd_sample_register_option() {
+	// creates our settings in the options table
+	register_setting('edd_sample_license', 'edd_sample_license_key', 'edd_sanitize_license' );
+}
+add_action('admin_init', 'edd_sample_register_option');
+
+function edd_sanitize_license( $new ) {
+	$old = get_option( 'edd_sample_license_key' );
+	if( $old && $old != $new ) {
+		delete_option( 'edd_sample_license_status' ); // new license has been entered, so must reactivate
+	}
+	return $new;
+}
+```
+
+## Pengaturan
+
+Dalam addon Sejoli Lisensi Anda terdapat direktori bernama /samples/sejoli-sample-theme/updater/. Folder ini perlu disalin ke folder utama theme Anda.
+
+Kemudian tempatkan kode berikut ke dalam `function.php` theme Anda:
+
+```bash
+/**
+ * Load theme updater functions.
+ * Action is used so that child themes can easily disable.
+ */
+
+function prefix_theme_updater() {
+    require( get_template_directory() . '/updater/theme-updater.php' );
+}
+add_action( 'after_setup_theme', 'prefix_theme_updater' );
+```
+
+Silakan ubah awalan (prefix) menjadi sesuatu yang sesuai dengan theme Anda. Kode ini termasuk kode updater.
+
+## Konfigurasikan Pembaruan
+
+Edit `/updater/theme-updater.php` dan masukkan nilai yang sesuai untuk elemen array berikut:
+
+```bash
+$config = array(
+    'remote_api_url' => 'https://YOURWEB.com', // Web tempat Sejoli diinstal
+    'item_name' => 'Nama Tema', // Nama theme
+    'theme_slug' => 'theme-slug', // Theme slug
+    'version' => '1.0.0', // Versi terkini dari theme ini
+    'author' => 'Sejoli', // Pemilik theme ini
+    'download_id' => '', // Opsional, digunakan untuk membuat link perpanjangan lisensi
+    'renew_url' => '', // Opsional, memungkinkan tautan perpanjangan lisensi khusus,
+    'item_id' => '', // ID produk pada web 
+),
+```
+
+Selain itu, dalam file yang sama, ubah domain teks `sejoli-theme-updater` agar sesuai dengan theme Anda. Contoh:
+
+```bash
+// Strings
+    $strings = array(
+        'theme-license'             => __( 'Theme License', 'sejoli-theme-updater' ),
+	)
+```
+
+## Pengemasan dan Penjualan
+
+Theme Anda harus di-zip sama seperti theme lainnya, tidak ada perbedaan. Kemudian buat produk baru di Sejoli.
+
+Selesaikan semuanya seperti yang Anda lakukan pada produk biasa, unggah file theme Anda dan berikan harga, dll.
+
+Kemudian pastikan untuk mencentang kotak untuk mengaktifkan lisensi. **Ini adalah kodeuntuk proses pembaruan**.
+
+![Changelog](./img/Xnapper-2024-10-17-12.55.05.png)
+
+Sebagian besar pengaturan dalam kotak meta Lisensi dapat diatur sesuai keinginan Anda, namun nomor versi penting. Saat Anda menambah nomor versi, ini akan mengingatkan web pelanggan Anda bahwa ada versi baru. Untuk versi awal Anda, pilih sesuatu dan perbesar hanya ketika tiba waktunya untuk versi baru. Contoh: mulai dari 1.0 dan kemudian lanjutkan ke 1.1 hanya jika Anda ingin semua orang mendapatkan versi baru.
+
+## Memperbarui theme Anda
+
+Bila Anda memilih untuk merilis versi baru, ganti file lama dengan yang baru. Kemudian masukkan beberapa teks ke dalam kolom Changelog di tab Auto Updater. Terakhir, tambah nomor versi dan simpan unduhan. Kemudian web pelanggan Anda akan diberitahu bahwa ada versi baru, dan mereka akan dapat mengklik Perbarui.
+
+## Catatan penting
+- Kode yang ditampilkan pada halaman ini murni untuk tujuan demonstratif dan tidak dimaksudkan untuk digunakan apa adanya. Jangan menyalin dan menempelkannya ke theme Anda dan mengharapkannya berfungsi apa adanya.
+- Semua nama fungsi yang ditambahkan ke plugin Anda harus mendapatkan awalan unik. Kami telah menggunakan sejoli_sample_ di seluruh contoh ini. Jangan simpan sejoli_sample_ di plugin Anda sendiri, gantilah dengan awalan unik Anda sendiri.
+- Nama konstanta harus diubah. Jangan simpan sebagai `SEJOLI_ITEM_NAME` dan `SEJOLI_STORE_URL`. Gunakan konstanta unik Anda sendiri.
+
