@@ -83,8 +83,8 @@ Kode ini menyiapkan halaman submenu yang disebut “Lisensi Plugin” di bawah m
 Ada dua baris di bagian atas fungsi sejoli_sample_license_page:
 
 ```bash
-$license = get_option( 'edd_sample_license_key' );
-$status  = get_option( 'edd_sample_license_status' );
+$license = get_option( 'sejoli_sample_license_key' );
+$status  = get_option( 'sejoli_sample_license_status' );
 ```
 
 Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi **aktif**. Hal ini agar kita dapat menampilkan tombol **Aktifkan Lisensi** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
@@ -110,6 +110,6 @@ Itu saja!
 
 **Catatan penting**
 - Kode yang ditampilkan pada halaman ini murni untuk tujuan demonstratif dan tidak dimaksudkan untuk digunakan apa adanya. Jangan menyalin dan menempelkannya ke plugin Anda dan mengharapkannya berfungsi apa adanya.
-- Semua nama fungsi yang ditambahkan ke plugin Anda harus mendapatkan awalan unik. Kami telah menggunakan sejoli_sample_ di seluruh contoh ini. Jangan simpan sejoli_sample_ di plugin Anda sendiri, gantilah dengan awalan unik Anda sendiri.
-- Nama konstanta harus diubah. Jangan simpan sebagai SEJOLI_SAMPLE_ITEM_NAME dan SEJOLI_SAMPLE_STORE_URL. Gunakan konstanta unik Anda sendiri.
-- Jika Anda memperluas kelas pembaru dari file selain file plugin utama, tambahkan mendefinisikan `( ‘YOUR_PREFIX_PLUGIN_FILE’, __FILE__ )`; ke file plugin utama, lalu alih-alih memanggil **__FILE__** sebagai parameter kedua dari kelas `SEJOLI_Plugin_Updater` yang baru, panggil `YOUR_PREFIX_PLUGIN_FILE` di sana.
+- Semua nama fungsi yang ditambahkan ke plugin Anda harus mendapatkan awalan unik. Kami telah menggunakan **sejoli_sample_** di seluruh contoh ini. Jangan simpan **sejoli_sample_** di plugin Anda sendiri, gantilah dengan awalan unik Anda sendiri.
+- Nama konstanta harus diubah. Jangan simpan sebagai `SEJOLI_SAMPLE_ITEM_NAME` dan `SEJOLI_SAMPLE_STORE_URL`. Gunakan konstanta unik Anda sendiri.
+- Jika Anda memperluas kelas pembaru dari file selain file plugin utama, tambahkan mendefinisikan `( 'YOUR_PREFIX_PLUGIN_FILE', __FILE__ )`; ke file plugin utama, lalu alih-alih memanggil **__FILE__** sebagai parameter kedua dari kelas `SEJOLI_Plugin_Updater` yang baru, panggil `YOUR_PREFIX_PLUGIN_FILE` di sana.

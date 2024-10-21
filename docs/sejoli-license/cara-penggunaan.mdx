@@ -6,17 +6,21 @@ sidebar_position: 1
 
 Tutorial ini akan memandu Anda melalui petunjuk pengaturan untuk add-on Sejoli License.
 
+**Download Sample Plugin dan Theme WordPress**
+- [Download Sample Plugin](./files/sejoli-sample-plugin.zip)
+- [Download Sample Theme](./files/sejoli-sample-theme.zip)
+
 :::tip Add-on Sejoli License
-Meskipun add-on ini dibuat khusus produk digital berupa plugin dan theme WordPress, karena API yang disertakan, sebagian besar aplikasi basis web atau sejenisnya dapat memanfaatkan fitur yang disediakannya.
+Meskipun add-on ini dibuat khusus produk digital berupa plugin dan theme WordPress, karena API yang disertakan, sebagian besar aplikasi basis web atau sejenisnya dapat memanfaatkan fitur yang telah disediakan.
 :::
 
 Setelah diinstal & diaktifkan add-on sejoli license, pengaturan ada di:
 - Pengaturan Aktivasi Lisensi pembelian anda, ambil kode lisensi di member area
-- Pengaturan Produk: Menu Products → All  Products → Add New
+- Pengaturan Produk Sejoli: Menu Products → All  Products → Add New
 
 ## Mengonfigurasi Opsi Produk
 
-Pembuatan kode lisensi diatur berdasarkan produk per produk, sehingga tidak semua produk yang dijual melalui toko Anda diharuskan memiliki pembuatan kunci lisensi. Untuk mengatur produk agar menghasilkan kode lisensi saat dibeli, buka halaman produk Anda, lalu klik Edit pada produk yang ingin Anda konfigurasi.
+Pembuatan kode lisensi diatur berdasarkan produk per produk, sehingga tidak semua produk yang dijual melalui web Anda diharuskan memiliki pembuatan kode lisensi. Untuk mengatur produk agar menghasilkan kode lisensi saat dibeli, buka halaman produk Anda, lalu klik Edit pada produk yang ingin Anda konfigurasi.
 
 Di bawah ini adalah tangkapan layar bagian antarmuka pengguna dalam satu produk untuk menyiapkan lisensi untuk produk tersebut.
 
@@ -24,7 +28,7 @@ Di bawah ini adalah tangkapan layar bagian antarmuka pengguna dalam satu produk 
 
 ![Pengaturan Lisensi](./img/Xnapper-2024-10-17-12.55.05.png)
 
-Pada layar edit produk tipe produk digital bagian tab Lisensi muncul ada kotak “Jumlah Penggunaan Lisensi” baru yang ditambahkan. Semua pengaturan untuk lisensi khusus untuk produk saat ini akan dilakukan di kotak ini.
+Pada layar edit produk tipe produk digital bagian tab Lisensi muncul ada kotak **Jumlah Penggunaan Lisensi** baru yang ditambahkan. Semua pengaturan untuk lisensi khusus untuk produk digital saat ini dilakukan di kotak ini.
 
 :::tip Jumlah Penggunaan Lisensi
 Ini adalah berapa kali maksimum setiap kode lisensi dapat diaktifkan. Jika Anda ingin membatasi kode lisensi hingga 10 penggunaan per pelanggan, masukkan 10. Jika Anda tidak ingin menerapkan batasan batas apa pun, biarkan kosong atau masukkan 0.
@@ -33,7 +37,7 @@ Ini adalah berapa kali maksimum setiap kode lisensi dapat diaktifkan. Jika Anda 
 
 **2. License ID**
 
-Pengaturan license ID untuk membatasi kode license agar tidak bisa dipakai pada produk lain dan sebagai slug plugin dan theme untuk auto updater.
+Pengaturan license ID untuk membatasi kode license agar tidak bisa dipakai pada produk lain dan sebagai nama direktori/folser plugin dan theme untuk auto updater.
 
 ![License ID](./img/Xnapper-2024-10-17-13.09.48.png)
 
@@ -51,11 +55,11 @@ Pengaturan Auto Update pada tab Auto Updater, ada beberapa bagian. diantaranya:
 
 ## Masukkan versi update
 
-Ini sesuai dengan nomor versi plugin atau theme Anda saat ini yang tersedia. Jika Anda menjual versi 1.0, masukkan 1.0 di sini. Jika versi yang tersedia saat ini adalah 1.5, masukkan 1.5 di sini. Nomor versi ini digunakan khusus untuk plugin dan tema WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis aplikasi lain dengan memanfaatkan API yang disertakan.
+Ini sesuai dengan nomor versi plugin atau theme Anda saat ini yang tersedia. Jika Anda menjual versi 1.0, masukkan 1.0 di sini. Jika versi yang tersedia saat ini adalah 1.5, masukkan 1.5 di sini. Nomor versi ini digunakan khusus untuk plugin dan theme WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis aplikasi lain dengan memanfaatkan API yang disertakan.
 
 ## Upload File Update
 
-Ini memungkinkan Anda mengatur file .zip (atau mungkin format lain) yang dikirimkan ke pengguna saat melakukan auto update. Opsi ini digunakan khusus untuk plugin dan theme WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis app/perangkat lunak lain dengan memanfaatkan API yang disertakan. Jika Anda menjual plugin atau theme WordPress, opsi ini harus disetel ke .zip yang hanya berisi file plugin atau tema yang diperlukan. File .zip ini diatur melalui bagian konfigurasi Unduh File utama.
+Ini memungkinkan Anda mengatur file .zip (atau mungkin format lain) yang dikirimkan ke pengguna saat melakukan auto update. Opsi ini digunakan khusus untuk plugin dan theme WordPress yang telah menerapkan sistem auto update, namun juga dapat digunakan oleh jenis app/perangkat lunak lain dengan memanfaatkan API yang disertakan. Jika Anda menjual plugin atau theme WordPress, opsi ini harus disetel ke format .zip yang hanya berisi file plugin atau theme yang diperlukan. File `.zip` ini diatur melalui bagian Upload File Update.
 
 ## Changelog
 

@@ -6,75 +6,69 @@ sidebar_position: 3
 
 :::warning Catatan Penting
 Dokumentasi ini tidak diperlukan jika menggunakan API Updater. Hanya merujuk ke dokumen ini jika Anda tidak menggunakan pembaru atau jika ini untuk referensi:
-- [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk plugin WordPress Anda.](https://developer.wordpress.org/apis/transients/)
-- [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk theme WordPress Anda.](https://developer.wordpress.org/apis/transients/)
+- [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk plugin WordPress Anda.](docs/sejoli-license/implementasi-updater-untuk-plugin-wordpress.mdx)
+- [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk theme WordPress Anda.](docs/sejoli-license/implementasi-updater-untuk-theme-wordpress.mdx)
 :::
 
 ## Activating
+
 Dengan Lisensi, agar kode lisensi dapat dimanfaatkan sepenuhnya, kode tersebut harus diaktifkan. Hal ini dapat dilakukan melalui:
 
-Pembeli dapat mengaktifkan lisensi dari jarak jauh melalui sistem di plugin/tema/app Anda yang menggunakan API untuk memicu aktivasi.
+Pembeli dapat mengaktifkan lisensi dari jarak jauh melalui sistem di plugin/theme/app Anda yang menggunakan API untuk memicu aktivasi.
 
 **Catatan:** contoh plugin dan implementasi yang ditunjukkan dalam dokumen ini adalah murni contoh. Implementasi Lisensi mengambil sampel ini dan mengintegrasikannya dengan mulus ke halaman pengaturan plugin Anda.
 
-Dalam dokumentasi ini, kami akan menunjukkan cara mengaktifkan lisensi dari jarak jauh melalui sistem yang ditambahkan ke plugin WordPress Anda. Kode contoh yang kami tunjukkan kepada Anda dalam contoh ini adalah kode persis sama yang disertakan dengan contoh plugin dan tema, tersedia untuk diunduh setelah membeli addon sejoli license.
+Dalam dokumentasi ini, kami akan menunjukkan cara mengaktifkan lisensi dari jarak jauh melalui sistem yang ditambahkan ke plugin WordPress Anda. Kode contoh yang kami tunjukkan kepada Anda dalam contoh ini adalah kode persis sama yang disertakan dengan contoh plugin dan theme, tersedia untuk diunduh setelah membeli addon sejoli license.
 
 Ada dua komponen utama untuk mengaktifkan lisensi via API:
 - **Menyimpan kode lisensi** dalam data (opsi theme atau plugin)
 - **Mengirim kode lisensi** yang disimpan melalui API ke web untuk verifikasi dan aktivasi
 
-Saat lisensi diaktifkan melalui API, status lisensi di dashboard web Anda akan diperbarui dari 'inactive' (keadaan default) menjadi 'active'.
+Saat lisensi diaktifkan melalui API, status lisensi di dashboard web Anda akan diperbarui dari `inactive` (keadaan default) menjadi `active`.
 
 Pertama mari kita lihat cara membuat halaman opsi sederhana untuk menyimpan lisensi kita.
 
 ```bash
 <?php
+/**
+ * Menambahkan halaman lisensi plugin ke menu admin.
+ *
+ * @return void
+ */
 function sejoli_sample_license_menu() {
-	add_plugins_page( 'Plugin License', 'Plugin License', 'manage_options', SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE, 'sejoli_sample_license_page' );
+	add_plugins_page(
+		__( 'Plugin License' ),
+		__( 'Plugin License' ),
+		'manage_options',
+		SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE,
+		'sejoli_sample_license_page'
+	);
 }
-add_action('admin_menu', 'sejoli_sample_license_menu');
+add_action( 'admin_menu', 'sejoli_sample_license_menu' );
 
 function sejoli_sample_license_page() {
-	$license = get_option( 'sejoli_sample_license_key' );
-	$status  = get_option( 'sejoli_sample_license_status' );
+	add_settings_section(
+		'sejoli_sample_license',
+		__( 'Plugin License' ),
+		'sejoli_sample_license_key_settings_section',
+		SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE
+	);
+	add_settings_field(
+		'sejoli_sample_license_key',
+		'<label for="sejoli_sample_license_key">' . __( 'License Key' ) . '</label>',
+		'sejoli_sample_license_key_settings_field',
+		SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE,
+		'sejoli_sample_license',
+	);
 	?>
 	<div class="wrap">
-		<h2><?php _e('Plugin License Options'); ?></h2>
+		<h2><?php esc_html_e( 'Plugin License Options' ); ?></h2>
 		<form method="post" action="options.php">
-
-			<?php settings_fields('sejoli_sample_license'); ?>
-
-			<table class="form-table">
-				<tbody>
-					<tr valign="top">
-						<th scope="row" valign="top">
-							<?php _e('License Key'); ?>
-						</th>
-						<td>
-							<input id="sejoli_sample_license_key" name="sejoli_sample_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
-							<label class="description" for="sejoli_sample_license_key"><?php _e('Enter your license key'); ?></label>
-						</td>
-					</tr>
-					<?php if( false !== $license ) { ?>
-						<tr valign="top">
-							<th scope="row" valign="top">
-								<?php _e('Activate License'); ?>
-							</th>
-							<td>
-								<?php if( $status !== false && $status == 'valid' ) { ?>
-									<span style="color:green;"><?php _e('active'); ?></span>
-									<?php wp_nonce_field( 'sejoli_sample_nonce', 'sejoli_sample_nonce' ); ?>
-									<input type="submit" class="button-secondary" name="sejoli_license_deactivate" value="<?php _e('Deactivate License'); ?>"/>
-								<?php } else {
-									wp_nonce_field( 'sejoli_sample_nonce', 'sejoli_sample_nonce' ); ?>
-									<input type="submit" class="button-secondary" name="sejoli_license_activate" value="<?php _e('Activate License'); ?>"/>
-								<?php } ?>
-							</td>
-						</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-			<?php submit_button(); ?>
+			<?php
+			do_settings_sections( SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE );
+			settings_fields( 'sejoli_sample_license' );
+			submit_button();
+			?>
 
 		</form>
 	<?php
@@ -104,7 +98,7 @@ $license = get_option( 'sejoli_sample_license_key' );
 $status = get_option( 'sejoli_sample_license_status' );
 ```
 
-Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi `active`. Hal ini agar kita dapat menampilkan tombol **Activate License** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
+Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi, kami akan mengubah status (di situs lokal kami) menjadi `active`. Hal ini agar kita dapat menampilkan tombol **Activate License** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
 
 
 ![Changelog](./img/Xnapper-2024-10-21-02.57.12.png)
@@ -135,12 +129,12 @@ function sejoli_sample_activate_license() {
 		$api_params = array(
 			'sejoli_action' => 'activate_license',
 			'license'    => $license,
-			'item_name'  => urlencode( EDD_SAMPLE_ITEM_NAME ), // the name of our product in EDD
+			'item_name'  => urlencode( SEJOLI_SAMPLE_ITEM_NAME ), // the name of our product in SEJOLI
 			'url'        => home_url()
 		);
 
 		// Call the custom API.
-		$response = wp_remote_post( EDD_SAMPLE_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+		$response = wp_remote_post( SEJOLI_SAMPLE_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
 		// make sure the response came back okay
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -181,7 +175,7 @@ function sejoli_sample_activate_license() {
 
 					case 'item_name_mismatch' :
 
-						$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), EDD_SAMPLE_ITEM_NAME );
+						$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), SEJOLI_SAMPLE_ITEM_NAME );
 						break;
 
 					case 'no_activations_left':
@@ -201,7 +195,7 @@ function sejoli_sample_activate_license() {
 
 		// Check if anything passed on a message constituting a failure
 		if ( ! empty( $message ) ) {
-			$base_url = admin_url( 'plugins.php?page=' . EDD_SAMPLE_PLUGIN_LICENSE_PAGE );
+			$base_url = admin_url( 'plugins.php?page=' . SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE );
 			$redirect = add_query_arg( array( 'sl_activation' => 'false', 'message' => urlencode( $message ) ), $base_url );
 
 			wp_redirect( $redirect );
@@ -211,7 +205,7 @@ function sejoli_sample_activate_license() {
 		// $license_data->license will be either "valid" or "invalid"
 
 		update_option( 'sejoli_sample_license_status', $license_data->license );
-		wp_redirect( admin_url( 'plugins.php?page=' . EDD_SAMPLE_PLUGIN_LICENSE_PAGE ) );
+		wp_redirect( admin_url( 'plugins.php?page=' . SEJOLI_SAMPLE_PLUGIN_LICENSE_PAGE ) );
 		exit();
 	}
 }
@@ -262,19 +256,18 @@ Anda dapat dengan mudah memeriksa apakah kode lisensi valid kapan saja. Anda mun
 Memeriksa validitas kode lisensi cukup sederhana; yang diperlukan hanyalah kami melakukan permintaan jarak jauh ke web toko kami dengan beberapa parameter tertentu. Lihat fungsinya di bawah ini:
 
 ```bash
-function edd_sample_theme_check_license() {
+function sejoli_sample_theme_check_license() {
 	$store_url = 'http://yoursite.com';
 	$item_name = 'Your Item Name';
 	$license = '834bbb2d27c02eb1ac11f4ce6ffa20bb';
 	$api_params = array(
-		'edd_action' => 'check_license',
+		'sejoli_action' => 'check_license',
 		'license' => $license,
 		'item_name' => urlencode( $item_name ),
 		'url' => home_url(),
-                'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production',
-
 	);
-	$response = wp_remote_post( $store_url, array( 'body' => $api_params, 'timeout' => 15, 'sslverify' => true ) );
+
+	$response = wp_remote_post( $store_url, array( 'body' => $api_params, 'timeout' => 15, 'sslverify' => false ) );
   	if ( is_wp_error( $response ) ) {
 		return false;
   	}
@@ -304,14 +297,13 @@ Proses penonaktifan hampir identik dengan proses aktivasi. Kami melakukan permin
 ```bash
 // data to send in our API request
 $api_params = array(
-	'edd_action' => 'deactivate_license',
+	'sejoli_action' => 'deactivate_license',
 	'license'    => '2ec66bae356be570236531ccba06a45b',
-	'item_name'  => 'Sample Plugin', // the name of our product in EDD
+	'item_name'  => 'Sample Plugin', // the name of our product in SEJOLI
 	'url'        => home_url(),
-        'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production',
 );
 // Send the remote request
-$response = wp_remote_post( 'http://yoursite.com', array( 'body' => $api_params, 'timeout' => 15, 'sslverify' => true ) );
+$response = wp_remote_post( 'http://yoursite.com', array( 'body' => $api_params, 'timeout' => 15, 'sslverify' => false ) );
 ```
 
 $response var akan menjadi objek json yang memberi tahu kita apakah permintaan penonaktifan berhasil atau tidak. Jika berhasil maka responnya adalah:
@@ -344,7 +336,7 @@ Jika lisensi gagal dinonaktifkan, responsnya adalah:
   "expires": "2024-10-16 21:41:09",
   "payment_id": 32,
   "customer_name": "Slamet Baraka",
-  "customer_email": "dev-slamet@wgmail.com"
+  "customer_email": "dev-slamet@gmail.com"
 }
 ```
 

@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # API
 
-API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan kode lisensi dari jarak jauh, memeriksa apakah kode tersebut valid (dan tidak kedaluwarsa/expired), dan juga mengambil informasi tentang versi plugin/theme/app. API ini dapat diimplementasikan dengan sebagian besar perangkat lunak/app, bukan hanya Plugin dan Theme WordPress.
+API yang disediakan sejoli + addon sejoli license memungkinkan Anda mengaktifkan kode lisensi dari jarak jauh, memeriksa apakah kode tersebut valid (dan tidak expired), dan juga mengambil informasi tentang versi plugin/theme/app. API ini dapat diimplementasikan dengan sebagian besar perangkat lunak/app, bukan hanya Plugin dan Theme WordPress.
 
 
 ## Permintaan API yang tersedia
@@ -18,7 +18,7 @@ Masing-masing metode di bawah ini bekerja dengan cara yang sama. URL situs web t
 
 ```bash
 https://YOURSITE.com/?sejoli_action={request type}&item_name={slug product
-}&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url={url of the site being licensed}
+}&license=0000072651-CCS5T-TNZ1L-JEXN3-1O0CSD&url={url web diinput lisensi}
 ```
 
 **Permintaan tersebut memerlukan tiga parameter dan memiliki satu parameter opsional**:
@@ -88,7 +88,7 @@ Kemungkinan kesalahan:
 
 `missing` → Lisensi tidak ada
 `missing_url` → URL tidak disediakan
-`dinonaktifkan` → Kunci lisensi dicabut
+`disabled` → Kunci lisensi dicabut
 `no_activations_left` → Tidak ada aktivasi tersisa
 `expired` → Lisensi telah kedaluwarsa
 `key_mismatch` → Lisensi tidak berlaku untuk produk ini
@@ -147,7 +147,6 @@ Jika lisensinya tidak valid, responsnya adalah:
     "order_parent_id": 0,
     "customer_name": "John Doe",
     "customer_email": "john@sample.com",
-    "price_id": "2"
 }
 ```
 
@@ -163,7 +162,7 @@ Kemungkinan status lisensi:
 
 Mengambil informasi versi memungkinkan Anda mengambil data tentang nomor versi terbaru dari jarak jauh, termasuk log perubahan dan tautan unduh untuk file pembaruan.
 
-Untuk mendapatkan informasi versi kunci lisensi:
+Untuk mendapatkan informasi versi kode lisensi:
 
 ```bash
 https://YOURSITE.com/?sejoli_action=get_version&element-widgets
@@ -192,12 +191,12 @@ Responsnya akan berupa objek JSON yang terlihat seperti ini:
 ```
 
 **Catatan mengenai tanggapan**:
-- Jika tidak ada kode lisensi yang diberikan dalam permintaan get_version, informasi versi tetap dikembalikan; namun, nilai url paket dan unduhan akan kosong. Sebaliknya, jika kode lisensi diberikan tetapi bukan milik item_name dalam permintaan, respons kesalahan akan dikembalikan dengan alasan sebagai nilai pesan.
-- Download_link akan disertakan jika file ada terlepas dari status lisensinya. Namun pengunduhan tidak akan berfungsi kecuali lisensinya aktif. Hal ini memungkinkan situs yang lisensinya telah habis masa berlakunya, untuk memperbaruinya, namun tidak perlu menunggu cache pembaruan dihapus sebelum mendapatkan pembaruan.
-- Properti section adalah array berseri yang mencakup deskripsi produk lengkap dan log perubahan. Jika menggunakan penguraian ReadMe.txt untuk plugin WordPress, itu juga akan menyertakan informasi tambahan yang diberikan melalui file readme.
+- Jika tidak ada kode lisensi yang diberikan dalam permintaan `get_version`, informasi versi tetap dikembalikan; namun, nilai url paket dan unduhan akan kosong. Sebaliknya, jika kode lisensi diberikan tetapi bukan milik `item_name` dalam permintaan, respons kesalahan akan dikembalikan dengan alasan sebagai nilai pesan.
+- `Download_link` akan disertakan jika file ada terlepas dari status lisensinya. Namun pengunduhan tidak akan berfungsi kecuali lisensinya aktif. Hal ini memungkinkan situs yang lisensinya telah habis masa berlakunya, untuk memperbaruinya, namun tidak perlu menunggu cache pembaruan dihapus sebelum mendapatkan pembaruan.
+- Properti section adalah array berseri yang mencakup deskripsi produk lengkap dan log perubahan.
 
-**Bagaimana cara mencegah akses ke perangkat lunak, plugin, atau tema saya jika lisensinya sudah habis masa berlakunya atau dinonaktifkan?**
+**Bagaimana cara mencegah akses ke perangkat lunak, plugin, atau theme saya jika lisensinya sudah habis masa berlakunya atau dinonaktifkan?**
 
 Status lisensi ini tidak mempengaruhi perangkat lunak/app, hanya menunjukkan status lisensinya. Terserah pengembang untuk membaca status itu untuk melakukan sesuatu. Misalnya, jika lisensi sudah Kedaluwarsa, perangkat lunak/app dapat memilih untuk berhenti bekerja atau memilih untuk memunculkan peringatan.
 
-Satu pengecualian untuk hal ini adalah ketika melihat lisensi yang kedaluwarsa atau dinonaktifkan melekat pada unduhan, tautan unduhan, termasuk tautan get_version, tidak akan berfungsi. Oleh karena itu, pembaruan tidak lagi berfungsi melalui respons get_version.
+Satu pengecualian untuk hal ini adalah ketika melihat lisensi yang kedaluwarsa atau dinonaktifkan melekat pada unduhan, tautan unduhan, termasuk tautan `get_version`, tidak akan berfungsi. Oleh karena itu, pembaruan tidak lagi berfungsi melalui respons `get_version`.
