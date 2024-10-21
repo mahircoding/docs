@@ -4,10 +4,10 @@ sidebar_position: 3
 
 # Activating, Checking dan Deactivating License di Plugin WordPress
 
-:::danger Catatan Penting
+:::warning Catatan Penting
 Dokumentasi ini tidak diperlukan jika menggunakan API Updater. Hanya merujuk ke dokumen ini jika Anda tidak menggunakan pembaru atau jika ini untuk referensi:
 - [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk plugin WordPress Anda.](https://developer.wordpress.org/apis/transients/)
-[- Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk theme WordPress Anda.](https://developer.wordpress.org/apis/transients/)
+- [Lihat dokumentasi kami tentang cara mengintegrasikan auto update untuk theme WordPress Anda.](https://developer.wordpress.org/apis/transients/)
 :::
 
 ## Activating
@@ -107,7 +107,7 @@ $status = get_option( 'sejoli_sample_license_status' );
 Yang pertama adalah lisensi itu sendiri dan yang kedua adalah status lisensinya. Setelah kami mengaktifkan lisensi kami, kami akan mengubah status (di situs lokal kami) menjadi `active`. Hal ini agar kita dapat menampilkan tombol **Activate License** jika lisensinya belum diaktifkan, dan menyembunyikan tombol tersebut jika sudah diaktifkan. Lihat tangkapan layar di bawah ini:
 
 
-![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
+![Changelog](./img/Xnapper-2024-10-21-02.57.12.png)
 
 
 Idenya di sini adalah pertama-tama kita memasukkan kode lisensi dan klik “Save Changes”, yang menyebabkan kode lisensi disimpan dalam opsi plugin/theme kami. Setelah opsi disimpan, kami mengklik tombol “Activate License” untuk memicu panggilan API.
@@ -250,57 +250,9 @@ function sejoli_sample_admin_notices() {
 add_action( 'admin_notices', 'sejoli_sample_admin_notices' );
 ```
 
-
-
-## Pengaturan
-
-Dalam addon Sejoli Lisensi Anda terdapat direktori bernama `/samples/sejoli-sample-theme/updater/`. Folder ini perlu disalin ke folder utama theme Anda.
-
-Kemudian tempatkan kode berikut ke dalam `function.php` theme Anda:
-
-```bash
-/**
- * Load theme updater functions.
- * Action is used so that child themes can easily disable.
- */
-
-function prefix_theme_updater() {
-    require( get_template_directory() . '/updater/theme-updater.php' );
-}
-add_action( 'after_setup_theme', 'prefix_theme_updater' );
-```
-
-Silakan ubah awalan (prefix) menjadi sesuatu yang sesuai dengan theme Anda. Kode ini termasuk kode updater.
-
-## Konfigurasikan Pembaruan
-
-Edit `/updater/theme-updater.php` dan masukkan nilai yang sesuai untuk elemen array berikut:
-
-```bash
-$config = array(
-    'remote_api_url' => 'https://YOURWEB.com', // Web tempat Sejoli diinstal
-    'item_name' => 'Nama Tema', // Nama theme
-    'theme_slug' => 'theme-slug', // Theme slug
-    'version' => '1.0.0', // Versi terkini dari theme ini
-    'author' => 'Sejoli', // Pemilik theme ini
-    'download_id' => '', // Opsional, digunakan untuk membuat link perpanjangan lisensi
-    'renew_url' => '', // Opsional, memungkinkan tautan perpanjangan lisensi khusus,
-    'item_id' => '', // ID produk pada web 
-),
-```
-
-Selain itu, dalam file yang sama, ubah domain teks `sejoli-theme-updater` agar sesuai dengan theme Anda. Contoh:
-
-```bash
-// Strings
-    $strings = array(
-        'theme-license'             => __( 'Theme License', 'sejoli-theme-updater' ),
-	)
-```
-
 Misalnya, jika pelanggan memasukkan kode lisensi yang tidak valid, pesan kesalahan akan ditampilkan:
 
-![Changelog](./img/Xnapper-2024-10-18-14.29.00.png)
+![Changelog](./img/Xnapper-2024-10-21-03.17.38.png)
 
 
 ## Checking
