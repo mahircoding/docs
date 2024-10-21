@@ -58,10 +58,10 @@ const config = {
     ({
       navbar: {
         title: 'BrizPress',
-        logo: {
-          alt: 'BrizPress Logo',
-          src: 'img/logo.svg',
-        },
+        // logo: {
+        //   alt: 'BrizPress Logo',
+        //   src: '',
+        // },
         items: [
           {
             type: 'doc',
